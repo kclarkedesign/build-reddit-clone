@@ -4,7 +4,7 @@ import Input from "components/shared/form/Input";
 import InputWrapper from "components/shared/form/InputWrapper";
 import Label from "components/shared/form/Label";
 import SubmitButton from "components/shared/form/SubmitButton";
-import { signupUser } from "lib/firebase";
+import { checkIfUsernameTaken, signupUser } from "lib/firebase";
 import { useForm } from "react-hook-form";
 
 export default function Signup() {
@@ -13,10 +13,12 @@ export default function Signup() {
     formState: { errors },
     getValues,
   } = useForm({ mode: "onBlur" });
+
   async function onSubmit(event) {
     event.preventDefault();
     const { username, email, password, confirm } = event.target.elements;
     const userCreds = await signupUser({
+      username: username.value,
       email: email.value,
       password: password.value,
     });
@@ -38,6 +40,7 @@ export default function Signup() {
               value: 20,
               message: "Must be less than 20 characters",
             },
+            validate: checkIfUsernameTaken,
           })}
           type="text"
         />

@@ -1,8 +1,16 @@
 // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { getFirestore } from "firebase/firestore/lite";
+import { initializeApp } from "firebase/app";
+import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+  collection,
+  doc,
+  getDocs,
+  getFirestore,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore/lite";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -27,18 +35,36 @@ const db = getFirestore(app);
 
 export async function loginUser() {}
 
-export async function signupUser({ email, password }) {
+export async function signupUser({ username, email, password }) {
   const userCreds = await createUserWithEmailAndPassword(auth, email, password);
-  return userCreds;
+
+  await createUser({
+    user: userCreds.user,
+    username,
+  });
+}
+
+export async function createUser({ user, username }) {
+  // add user so uid is document id
+  const userDoc = doc(db, "users", user.uid);
+  await setDoc(userDoc, {
+    uid: user.uid,
+    username,
+    email: user.email,
+  });
+}
+
+export async function checkIfUsernameTaken(username) {
+  const col = collection(db, "users");
+  const q = query(col, where("username", "==", username));
+  const { empty } = await getDocs(q);
+
+  return empty || "Username already taken";
 }
 
 export function useAuthUser() {}
 
-export async function checkIfUsernameTaken() {}
-
 export async function logOut() {}
-
-export async function createUser() {}
 
 export async function createPost() {}
 
