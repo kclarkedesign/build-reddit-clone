@@ -6,18 +6,29 @@ import Label from "components/shared/form/Label";
 import SubmitButton from "components/shared/form/SubmitButton";
 import { checkIfUsernameTaken, signupUser } from "lib/firebase";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useMutation } from "react-query";
 
-export default function Signup() {
+export default function Signup({ history }) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     getValues,
   } = useForm({ mode: "onBlur" });
+  const mutation = useMutation(signupUser, {
+    onSuccess: () => {
+      history.replace("/");
+      toast.success("Sign up successful!");
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
 
-  async function onSubmit(data) {
+  function onSubmit(data) {
     const { username, email, password } = data;
-    await signupUser({ username, email, password });
+    mutation.mutate({ username, email, password });
   }
 
   return (
