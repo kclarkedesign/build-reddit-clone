@@ -10,23 +10,18 @@ import { useForm } from "react-hook-form";
 export default function Signup() {
   const {
     register,
+    handleSubmit,
     formState: { errors },
     getValues,
   } = useForm({ mode: "onBlur" });
 
-  async function onSubmit(event) {
-    event.preventDefault();
-    const { username, email, password, confirm } = event.target.elements;
-    const userCreds = await signupUser({
-      username: username.value,
-      email: email.value,
-      password: password.value,
-    });
-    console.log(userCreds);
+  async function onSubmit(data) {
+    const { username, email, password } = data;
+    await signupUser({ username, email, password });
   }
 
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={handleSubmit(onSubmit)}>
       <InputWrapper>
         <Label>username</Label>
         <Input
