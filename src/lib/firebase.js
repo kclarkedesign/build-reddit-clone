@@ -1,16 +1,24 @@
 // Import the functions you need from the SDKs you need
 import { getAnalytics } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+} from "firebase/auth";
 import {
   collection,
   doc,
   getDocs,
+  getDoc,
   getFirestore,
   query,
   setDoc,
   where,
 } from "firebase/firestore/lite";
+import { useEffect } from "react";
+import useStore from "store";
+import shallow from "zustand/shallow";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -62,7 +70,35 @@ export async function checkIfUsernameTaken(username) {
   return empty || "Username already taken";
 }
 
-export function useAuthUser() {}
+export function useAuthUser() {
+  const [setUser, resetUser] = useStore(
+    (s) => [s.setUser, s.resetUser],
+    shallow
+  );
+
+  useEffect(() => {
+    async function getUser(user) {
+      if (!user) {
+        resetUser();
+      }
+      // get user by uid from firestore
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        setUser(userDoc.data());
+      } else {
+        resetUser();
+      }
+    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      getUser(user);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [setUser, resetUser]);
+}
 
 export async function logOut() {}
 
