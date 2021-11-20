@@ -9,8 +9,7 @@ import { Route, Switch } from "react-router";
 
 export default function App() {
   useAuthUser();
-  const { user } = useStore();
-  console.log(user);
+
   return (
     <>
       <Route component={Header} />
