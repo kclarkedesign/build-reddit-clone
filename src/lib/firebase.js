@@ -5,12 +5,13 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  signOut,
 } from "firebase/auth";
 import {
   collection,
   doc,
-  getDocs,
   getDoc,
+  getDocs,
   getFirestore,
   query,
   setDoc,
@@ -40,8 +41,6 @@ const analytics = getAnalytics(app);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
-
-export async function loginUser() {}
 
 export async function signupUser({ username, email, password }) {
   const userCreds = await createUserWithEmailAndPassword(auth, email, password);
@@ -80,14 +79,15 @@ export function useAuthUser() {
     async function getUser(user) {
       if (!user) {
         resetUser();
-      }
-      // get user by uid from firestore
-      const userRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userRef);
-      if (userDoc.exists()) {
-        setUser(userDoc.data());
       } else {
-        resetUser();
+        // get user by uid from firestore
+        const userRef = doc(db, "users", user.uid);
+        const userDoc = await getDoc(userRef);
+        if (userDoc.exists()) {
+          setUser(userDoc.data());
+        } else {
+          resetUser();
+        }
       }
     }
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -100,7 +100,11 @@ export function useAuthUser() {
   }, [setUser, resetUser]);
 }
 
-export async function logOut() {}
+export async function logOut() {
+  return await signOut(auth);
+}
+
+export async function loginUser() {}
 
 export async function createPost() {}
 
