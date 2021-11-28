@@ -1,4 +1,7 @@
+import useStore from "store";
 import styled from "styled-components/macro";
+import CategoryMenuCreatePostButton from "./CreatePostButton";
+import CategoryMenuDropdown from "./Dropdown";
 
 const Menu = styled.nav`
   display: none;
@@ -12,5 +15,12 @@ const Menu = styled.nav`
 `;
 
 export default function CategoryMenu() {
-  return <>categorymenu</>;
+  const user = useStore((s) => s.user);
+
+  return (
+    <Menu>
+      <CategoryMenuDropdown />
+      {user && <CategoryMenuCreatePostButton />}
+    </Menu>
+  );
 }

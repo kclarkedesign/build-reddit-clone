@@ -1,4 +1,7 @@
+import useStore from "store";
 import styled from "styled-components/macro";
+import SidebarCategoryList from "./CategoryList";
+import SidebarCreatePostButton from "./CreatePostButton";
 
 const Wrapper = styled.aside`
   display: flex;
@@ -15,5 +18,12 @@ const Wrapper = styled.aside`
 `;
 
 export default function Sidebar() {
-  return <>sidebar</>;
+  const user = useStore((s) => s.user);
+
+  return (
+    <Wrapper>
+      {user && <SidebarCreatePostButton />}
+      <SidebarCategoryList />
+    </Wrapper>
+  );
 }

@@ -1,4 +1,9 @@
+import CategoryMenu from "components/CategoryMenu";
+import Sidebar from "components/Sidebar";
+import { Route } from "react-router";
 import styled from "styled-components/macro";
+import PostList from "./PostList";
+import PostDetail from "./PostDetail";
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,5 +26,16 @@ const HomeMainSection = styled.main`
 `;
 
 export default function Home() {
-  return <>home</>;
+  return (
+    <Wrapper>
+      <HomeMainSection>
+        <Route component={CategoryMenu} />
+        <Route exact path="/" component={PostList} />
+        <Route exact path="/a/:category" component={PostList} />
+        <Route exact path="/u/:username" component={PostList} />
+        <Route exact path="/a/:category/:postId" component={{ PostDetail }} />
+      </HomeMainSection>
+      <Route component={Sidebar} />
+    </Wrapper>
+  );
 }
