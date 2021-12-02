@@ -11,12 +11,14 @@ import {
 import {
   collection,
   doc,
+  addDoc,
   getDoc,
   getDocs,
   getFirestore,
   query,
   setDoc,
   where,
+  serverTimestamp,
 } from "firebase/firestore/lite";
 import { useEffect } from "react";
 import useStore from "store";
@@ -42,6 +44,7 @@ const analytics = getAnalytics(app);
 
 const auth = getAuth(app);
 const db = getFirestore(app);
+export const getTimestamp = serverTimestamp;
 
 export async function signupUser({ username, email, password }) {
   const userCreds = await createUserWithEmailAndPassword(auth, email, password);
@@ -109,7 +112,13 @@ export async function loginUser({ email, password }) {
   return await signInWithEmailAndPassword(auth, email, password);
 }
 
-export async function createPost() {}
+export async function createPost(post) {
+  const postsCol = collection(db, "posts");
+  const { id } = await addDoc(postsCol, post);
+  const postDoc = doc(db, "posts", id);
+  const newPost = await getDoc(postDoc);
+  return { id, ...newPost.data() };
+}
 
 export async function getDocuments() {}
 

@@ -8,8 +8,11 @@ import { RadioGroupWrapper } from "components/shared/form/RadioGroup";
 import RadioGroupOption from "components/shared/form/RadioGroup/Option";
 import SelectWrapper from "components/shared/form/SelectWrapper";
 import SubmitButton from "components/shared/form/SubmitButton";
+import { createPost, getTimestamp } from "lib/firebase";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useMutation } from "react-query";
+import useStore from "store";
 import isURL from "validator/lib/isURL";
 
 const postTypes = [
@@ -23,14 +26,53 @@ const postTypes = [
   },
 ];
 
-export default function CreatePost() {
+export default function CreatePost({ history }) {
+  const user = useStore((s) => s.user);
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm({ mode: "onBlur" });
+
   const [type, setType] = useState("text");
+
+  const mutation = useMutation(createPost, {
+    onSuccess: ({ category, id }) => {
+      history.push(`/a/${category}/${id}`);
+    },
+  });
+
+  function onSubmit(data) {
+    const { title, url, text, category } = data;
+    if (!user) {
+      throw new Error("Login to create post");
+    }
+    const post = {
+      category,
+      title,
+      type,
+      views: 0,
+      score: 1,
+      created: getTimestamp(),
+      upvotePercentage: 100,
+      votes: {
+        [user.uid]: 1,
+      },
+      author: {
+        uid: user.uid,
+        username: user.username,
+      },
+    };
+    if (type === "text") {
+      post.text = text;
+    } else {
+      post.url = url;
+    }
+    mutation.mutate(post);
+  }
+
   return (
-    <Form wide>
+    <Form onSubmit={handleSubmit(onSubmit)} wide>
       <InputWrapper>
         <RadioGroupWrapper>
           {postTypes.map((option, index) => (
