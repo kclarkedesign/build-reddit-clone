@@ -15,12 +15,14 @@ import {
   getDoc,
   getDocs,
   getFirestore,
+  orderBy,
   query,
   setDoc,
   where,
   serverTimestamp,
 } from "firebase/firestore/lite";
 import { useEffect } from "react";
+import { get } from "react-hook-form";
 import useStore from "store";
 import shallow from "zustand/shallow";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -120,11 +122,24 @@ export async function createPost(post) {
   return { id, ...newPost.data() };
 }
 
-export async function getDocuments() {}
+export async function getDocuments(ref) {
+  const snap = await getDocs(ref);
+  const docs = snap.docs.map((doc) => ({
+    id: doc.id,
+    reference: doc.ref,
+    ...doc.data(),
+  }));
+  return docs;
+}
 
 export async function getPost() {}
 
-export async function getPosts() {}
+export async function getPosts() {
+  const col = collection(db, "posts");
+  const q = query(col, orderBy("score", "desc"));
+  const posts = await getDocuments(q);
+  return posts;
+}
 
 export async function getPostsByUsername() {}
 

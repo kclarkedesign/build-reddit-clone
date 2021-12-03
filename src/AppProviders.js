@@ -4,10 +4,17 @@ import { ThemeProvider } from "styled-components";
 import theme from "theme";
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import GlobalStyle from "styles/globalStyle";
 import useStore from "store";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: process.env.NODE_ENV === "production",
+    },
+  },
+});
 const history = createBrowserHistory();
 
 export default function AppProviders({ children }) {
@@ -15,6 +22,7 @@ export default function AppProviders({ children }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <ReactQueryDevtools />
       <Toaster position="bottom-center" />
       <ThemeProvider theme={theme(isDarkTheme)}>
         <GlobalStyle />
