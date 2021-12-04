@@ -1,5 +1,6 @@
 import styled from "styled-components/macro";
 import PostContentDetail from "./Detail";
+import PostContentFullText from "./FullText";
 import PostContentPreview from "./Preview";
 import PostContentTitle from "./Title";
 
@@ -15,7 +16,7 @@ const Wrapper = styled.div`
 export default function PostContent({ post, full }) {
   return (
     <Wrapper>
-      <PostContentTitle />
+      <PostContentTitle post={post} full={full} />
       {renderContent(post, full)}
       <PostContentDetail post={post} />
     </Wrapper>
@@ -28,11 +29,11 @@ function renderContent(post, full) {
   switch (type) {
     case "link":
       return <PostContentPreview>{url}</PostContentPreview>;
-    case "link":
+    case "text":
       if (full) {
-        return <PostContentPreview>{text}</PostContentPreview>;
+        return <PostContentFullText>{text}</PostContentFullText>;
       }
-      return <PostContentPreview>{te}</PostContentPreview>;
+      return <PostContentPreview>{text}</PostContentPreview>;
     default:
       return;
   }

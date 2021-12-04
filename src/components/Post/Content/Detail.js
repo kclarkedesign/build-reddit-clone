@@ -28,8 +28,8 @@ export default function PostContentDetail({ post }) {
   return (
     <Wrapper>
       <Link to={`a/${category}/${id}`}>0 comments</Link>
-      <Link to={`a/${category}/${id}`}>a/${category}</Link>
-      <span>by </span>
+      <Link to={`a/${category}`}>a/${category}</Link>
+      <span>by</span>
       <Author username={author.username} />
       <span>created</span>
     </Wrapper>
