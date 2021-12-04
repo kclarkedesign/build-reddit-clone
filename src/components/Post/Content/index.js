@@ -1,4 +1,7 @@
 import styled from "styled-components/macro";
+import PostContentDetail from "./Detail";
+import PostContentPreview from "./Preview";
+import PostContentTitle from "./Title";
 
 const Wrapper = styled.div`
   display: flex;
@@ -9,8 +12,28 @@ const Wrapper = styled.div`
   min-width: 0;
 `;
 
-export default function PostContent() {
-  return <>postcontent</>;
+export default function PostContent({ post, full }) {
+  return (
+    <Wrapper>
+      <PostContentTitle />
+      {renderContent(post, full)}
+      <PostContentDetail post={post} />
+    </Wrapper>
+  );
 }
 
-function renderContent() {}
+function renderContent(post, full) {
+  const { type, url, text } = post;
+
+  switch (type) {
+    case "link":
+      return <PostContentPreview>{url}</PostContentPreview>;
+    case "link":
+      if (full) {
+        return <PostContentPreview>{text}</PostContentPreview>;
+      }
+      return <PostContentPreview>{te}</PostContentPreview>;
+    default:
+      return;
+  }
+}

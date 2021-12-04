@@ -1,3 +1,4 @@
+import Post from "components/Post";
 import Empty from "components/shared/Empty";
 import LoadingIndicatorBox from "components/shared/LoadingIndicator/Box";
 import { getPost, getPosts } from "lib/firebase";
@@ -38,6 +39,10 @@ export default function PostList() {
   );
 }
 
-function PostListItem() {
-  return <>postlistitem</>;
+function PostListItem({ post }) {
+  return (
+    <Item>
+      <Post post={post} full={false} />
+    </Item>
+  );
 }

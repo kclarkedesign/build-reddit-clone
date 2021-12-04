@@ -1,4 +1,7 @@
+import useStore from "store";
 import styled from "styled-components/macro";
+import PostVoteDownvote from "./Downvote";
+import PostVoteUpvote from "./Upvote";
 
 const Wrapper = styled.div`
   display: flex;
@@ -13,6 +16,17 @@ const Wrapper = styled.div`
   color: ${(props) => props.theme.normalText};
 `;
 
-export default function PostVote() {
-  return <>postvote</>;
+export default function PostVote({ post }) {
+  const { id: postId, score, votes } = post;
+  const user = useStore((s) => s.user);
+  const userId = user?.uid;
+  const didUpvote = votes[userId] === 1;
+  const didDownvote = votes[userId] === -1;
+  return (
+    <Wrapper>
+      <PostVoteUpvote canVote={user} didVote={didUpvote} />
+      <span>{score}</span>
+      <PostVoteDownvote canVote={user} didVote={didDownvote} />
+    </Wrapper>
+  );
 }
