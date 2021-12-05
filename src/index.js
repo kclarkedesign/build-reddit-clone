@@ -1,3 +1,4 @@
+import "lib/date-config";
 import AppProviders from "AppProviders";
 import ReactDOM from "react-dom";
 import "styles/index.css";
