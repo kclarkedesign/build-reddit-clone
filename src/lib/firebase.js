@@ -132,7 +132,11 @@ export async function getDocuments(ref) {
   return docs;
 }
 
-export async function getPost() {}
+export async function getPost(postId) {
+  const postRef = doc(db, "posts", postId);
+  const postDoc = await getDoc(postRef);
+  return postDoc.exists() ? { id: postDoc.id, ...postDoc.data() } : null;
+}
 
 export async function getPosts() {
   const col = collection(db, "posts");

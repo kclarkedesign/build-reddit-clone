@@ -13,7 +13,7 @@
     "react-query": "^3.27.0",
     "react-router-dom": "^5.3.0",
     "react-scripts": "^4.0.3",
-    "remark-breaks": "^1.0.2",
+    "remark-breaks": "^3.0.2",
     "styled-components": "^5.3.3",
     "validator": "^13.6.0",
     "zustand": "^3.5.13"

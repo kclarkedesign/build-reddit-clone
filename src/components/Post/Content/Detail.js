@@ -28,8 +28,8 @@ export default function PostContentDetail({ post }) {
   const { category, id, author, created } = post;
   return (
     <Wrapper>
-      <Link to={`a/${category}/${id}`}>0 comments</Link>
-      <Link to={`a/${category}`}>a/${category}</Link>
+      <Link to={`/a/${category}/${id}`}>0 comments</Link>
+      <Link to={`/a/${category}`}>a/{category}</Link>
       <span>by</span>
       <Author username={author.username} />
       <span>{dayjs(created.toDate()).fromNow()}</span>

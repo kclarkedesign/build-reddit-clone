@@ -55,10 +55,10 @@ const allowed = [
 
 const Markdown = (props) => (
   <StyledReactMarkdown
-    source={props.children}
-    plugins={[breaks]}
-    allowedTypes={allowed}
-    renderers={renderers}
+    children={props.children}
+    remarkPlugins={[breaks]}
+    allowedElements={allowed}
+    components={renderers}
     unwrapDisallowed
   />
 );
