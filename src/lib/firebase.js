@@ -19,6 +19,7 @@ import {
   query,
   setDoc,
   where,
+  runTransaction,
   serverTimestamp,
 } from "firebase/firestore/lite";
 import { useEffect } from "react";
@@ -175,4 +176,20 @@ export async function addView() {}
 
 export async function getCommentCount() {}
 
-export async function toggleVote() {}
+export async function toggleVote(vote) {
+  const { postId, userId, value } = vote;
+  const postRef = doc(db, "posts", postId);
+  await runTransaction(db, async (transaction) => {
+    const postDoc = await transaction.get(postRef);
+    if (postDoc.exists()) {
+      const votes = { ...postDoc.data().votes };
+      const isUnvote = votes[userId] === value;
+      if (isUnvote) {
+        delete votes[userId];
+      } else {
+        votes[userId] = value;
+      }
+      transaction.update(postRef, { votes });
+    }
+  });
+}
