@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import { get } from "react-hook-form";
 import useStore from "store";
 import shallow from "zustand/shallow";
+import { getPostScore, getUpvotePercentage } from "./helpers";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -189,7 +190,9 @@ export async function toggleVote(vote) {
       } else {
         votes[userId] = value;
       }
-      transaction.update(postRef, { votes });
+      const upvotePercentage = getUpvotePercentage(votes);
+      const score = getPostScore(votes);
+      transaction.update(postRef, { votes, score, upvotePercentage });
     }
   });
 }
