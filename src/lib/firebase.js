@@ -21,6 +21,7 @@ import {
   where,
   runTransaction,
   serverTimestamp,
+  deleteDoc,
 } from "firebase/firestore/lite";
 import { useEffect } from "react";
 import { get } from "react-hook-form";
@@ -165,7 +166,11 @@ export async function getPostsByCategory(category) {
   return posts;
 }
 
-export async function deletePost() {}
+export async function deletePost(postId) {
+  const docRef = doc(db, "posts", postId);
+  const deletedPost = await deleteDoc(docRef);
+  return deletedPost;
+}
 
 export async function createComment() {}
 
