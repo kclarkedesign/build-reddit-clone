@@ -3,6 +3,8 @@ import { link } from "components/shared/helpers";
 import { Link } from "react-router-dom";
 import styled from "styled-components/macro";
 import dayjs from "dayjs";
+import { useQuery } from "react-query";
+import { getCommentCount } from "lib/firebase";
 
 const Wrapper = styled.div`
   font-size: 13px;
@@ -26,9 +28,15 @@ const Wrapper = styled.div`
 
 export default function PostContentDetail({ post }) {
   const { category, id, author, created } = post;
+  const { data: commmentCount } = useQuery(["commentCount", id], () =>
+    getCommentCount(id)
+  );
+
   return (
     <Wrapper>
-      <Link to={`/a/${category}/${id}`}>0 comments</Link>
+      <Link to={`/a/${category}/${id}`}>
+        {commmentCount} comments{commmentCount !== 1 ? "s" : ""}
+      </Link>
       <Link to={`/a/${category}`}>a/{category}</Link>
       <span>by</span>
       <Author username={author.username} />
