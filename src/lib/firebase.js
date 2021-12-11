@@ -1,5 +1,5 @@
 // Import the functions you need from the SDKs you need
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, logEvent } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import {
   createUserWithEmailAndPassword,
@@ -24,7 +24,6 @@ import {
   deleteDoc,
 } from "firebase/firestore/lite";
 import { useEffect } from "react";
-import { get } from "react-hook-form";
 import useStore from "store";
 import shallow from "zustand/shallow";
 import { getPostScore, getUpvotePercentage } from "./helpers";
@@ -46,7 +45,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-
+logEvent(analytics, "notification_received");
 const auth = getAuth(app);
 const db = getFirestore(app);
 export const getTimestamp = serverTimestamp;

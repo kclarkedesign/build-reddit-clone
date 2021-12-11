@@ -1,6 +1,6 @@
 export function getUpvotePercentage(votes) {
   const upvoteCount = Object.values(votes).reduce((acc, val) => {
-    if (val == 1) {
+    if (val === 1) {
       return (acc += 1);
     }
     return acc;

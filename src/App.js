@@ -4,7 +4,6 @@ import CreatePost from "pages/CreatePost";
 import Home from "pages/Home";
 import Login from "pages/Login";
 import Signup from "pages/Signup";
-import useStore from "store";
 import { Route, Switch } from "react-router";
 
 export default function App() {

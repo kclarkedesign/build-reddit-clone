@@ -1,12 +1,7 @@
 import Post from "components/Post";
 import Empty from "components/shared/Empty";
 import LoadingIndicatorBox from "components/shared/LoadingIndicator/Box";
-import {
-  getPost,
-  getPosts,
-  getPostsByCategory,
-  getPostsByUsername,
-} from "lib/firebase";
+import { getPosts, getPostsByCategory, getPostsByUsername } from "lib/firebase";
 import { useQuery } from "react-query";
 import { useParams } from "react-router";
 import styled from "styled-components/macro";
