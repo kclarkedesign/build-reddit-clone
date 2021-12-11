@@ -1,3 +1,7 @@
+import Author from "components/shared/Author";
+import DeleteButton from "components/shared/DeleteButton";
+import dayjs from "dayjs";
+import useStore from "store";
 import styled from "styled-components/macro";
 
 const Wrapper = styled.div`
@@ -12,6 +16,15 @@ const Timestamp = styled.span`
   color: ${(props) => props.theme.mutedText};
 `;
 
-export default function CommentDetail() {
-  return <>commentdetail</>;
+export default function CommentDetail({ id, author, created }) {
+  const user = useStore((s) => s.user);
+  const isAuthor = user?.uid === author.uid;
+
+  return (
+    <Wrapper>
+      <Author username={author.username} />
+      <Timestamp>{dayjs(created.toDate()).fromNow()}</Timestamp>
+      {isAuthor && <DeleteButton />}
+    </Wrapper>
+  );
 }

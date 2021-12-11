@@ -5,7 +5,7 @@ import { transition } from "components/shared/helpers";
 import { createComment, getTimestamp } from "lib/firebase";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import styled from "styled-components/macro";
 import CommentFormSubmitButton from "./SubmitButton";
 
@@ -65,8 +65,10 @@ export default function CommentForm({ user, postId }) {
     reset,
     formState: { errors },
   } = useForm({ mode: "onBlur" });
+  const queryClient = useQueryClient();
   const mutation = useMutation(createComment, {
     onSuccess: () => {
+      queryClient.invalidateQueries(["comments", postId]);
       toast.success("Comment created");
       reset();
     },
