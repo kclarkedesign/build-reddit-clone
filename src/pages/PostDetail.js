@@ -58,7 +58,7 @@ export default function PostDetail() {
     <>
       <PostDetailPost post={post} />
       <PostDetailInfoBar postId={postId} post={post} user={user} />
-      {user && <CommentForm postId={postId} />}
+      {user && <CommentForm postId={(user, postId)} />}
       <PostDetailCommentSection postId={postId} />
     </>
   );

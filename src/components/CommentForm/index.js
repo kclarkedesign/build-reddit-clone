@@ -1,6 +1,8 @@
+import Error from "components/shared/form/Error";
 import Form from "components/shared/form/Form";
 import Input from "components/shared/form/Input";
 import { transition } from "components/shared/helpers";
+import { useForm } from "react-hook-form";
 import styled from "styled-components/macro";
 import CommentFormSubmitButton from "./SubmitButton";
 
@@ -53,14 +55,36 @@ const CommentFormTextArea = styled(Input)`
   }
 `;
 
-export default function CommentForm() {
+export default function CommentForm({ user, postId }) {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ mode: "onBlur" });
+
+  function onSubmit({ commentText }) {
+    console.log(commentText);
+  }
+
   return (
-    <StyledForm>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <CommentFormTextArea
+        {...register("commentText", {
+          required: "Comment text is required",
+          minLength: {
+            value: 5,
+            message: "Comment must be at least 5 characters",
+          },
+          maxLength: {
+            value: 10000,
+            message: "Comment must be under 10,000 characters",
+          },
+        })}
         as="textarea"
         placeholder="enter your comment"
         rows="6"
       />
+      <Error>{errors.commentText?.message}</Error>
       <CommentFormSubmitButton />
     </StyledForm>
   );
